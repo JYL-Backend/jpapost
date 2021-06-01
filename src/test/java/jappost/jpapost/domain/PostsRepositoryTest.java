@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -23,19 +24,19 @@ class PostsRepositoryTest {
         String title = "테스트 제목";
         String content = "테스트 본문";
 
-        postsRepository.save(Posts.builder()
-        .title(title)
-        .content(content)
-        .author("wnsdud2336@naver.com")
-        .build());
+        Long id = postsRepository.save(Posts.builder()
+                .title(title)
+                .content(content)
+                .author("wnsdud2336@naver.com")
+                .build()).getId();
 
         //when
-        List<Posts> postsList = postsRepository.findAll();
+        Posts posts = postsRepository.findById(id).get();
 
         //then
-        Posts posts = postsList.get(0);
         assertThat(posts.getTitle()).isEqualTo(title);
         assertThat(posts.getContent()).isEqualTo(content);
         assertThat(posts.getAuthor()).isEqualTo("wnsdud2336@naver.com");
     }
+
 }
